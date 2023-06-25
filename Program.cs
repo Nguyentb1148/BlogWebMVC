@@ -1,8 +1,16 @@
+using BlogWebMVC.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<BlogDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<BlogWebMVCContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
